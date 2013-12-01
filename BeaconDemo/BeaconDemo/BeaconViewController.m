@@ -23,7 +23,6 @@
     locationManager.delegate = self;
     
     
-    
     NSString *uuid = [[NSUserDefaults standardUserDefaults] stringForKey:@"BeaconUUID"];
     [self.uuidLabel setText:uuid];
     
@@ -33,6 +32,9 @@
     
     
     [self.distanceLabel setText:@"Unknown"];
+    [self.minorLabel setText:@""];
+    [self.majorLabel setText:@""];
+    [self.numberofBeaconsLabel setText:@"0"];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -99,8 +101,9 @@
 
 - (void) outsideRegionfor: (CLBeaconRegion*) beaconRegion{
     [locationManager stopRangingBeaconsInRegion:beaconRegion];
-    [self.majorLabel setText:@""];
     [self.minorLabel setText:@""];
+    [self.majorLabel setText:@""];
+    [self.numberofBeaconsLabel setText:@"0"];
     
 }
 - (void)locationManager:(CLLocationManager *)manager didEnterRegion:(CLRegion *)region {
@@ -115,6 +118,7 @@
 }
 
 - (void)locationManager:(CLLocationManager *)manager didRangeBeacons:(NSArray *)beacons inRegion:(CLBeaconRegion *)region {
+    [self.numberofBeaconsLabel setText:[NSString stringWithFormat:@"%d", beacons.count ]];
     for (CLBeacon *beacon in beacons) {
         [self setDistanceLabelForProximity:beacon.proximity];
         [self setMajorMinorLabelsForBeacon:beacon];

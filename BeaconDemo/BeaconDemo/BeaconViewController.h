@@ -5,6 +5,7 @@
 @interface BeaconViewController : UIViewController <CLLocationManagerDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *uuidLabel;
+@property (weak, nonatomic) IBOutlet UILabel *numberofBeaconsLabel;
 @property (weak, nonatomic) IBOutlet UILabel *majorLabel;
 @property (weak, nonatomic) IBOutlet UILabel *minorLabel;
 @property (weak, nonatomic) IBOutlet UILabel *stateLabel;
