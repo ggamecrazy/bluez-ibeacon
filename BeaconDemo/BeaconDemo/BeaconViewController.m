@@ -12,7 +12,7 @@
 - (void)loadView
 {
     locationManager = [[CLLocationManager alloc] init];
-
+    
     [super loadView];
 }
 
@@ -22,32 +22,17 @@
     
     locationManager.delegate = self;
     
+    
+    
     NSString *uuid = [[NSUserDefaults standardUserDefaults] stringForKey:@"BeaconUUID"];
-    NSInteger major = [[NSUserDefaults standardUserDefaults] integerForKey:@"BeaconMajor"];
-    NSInteger minor = [[NSUserDefaults standardUserDefaults] integerForKey:@"BeaconMinor"];
+    [self.uuidLabel setText:uuid];
     
     CLBeaconRegion *region = [[CLBeaconRegion alloc] initWithProximityUUID:[[NSUUID alloc] initWithUUIDString:uuid] identifier:BEACON_ID];
+    [locationManager startMonitoringForRegion:region];
+    [locationManager requestStateForRegion:region];
     
-    region = [locationManager.monitoredRegions member:region];
     
-    if(region)
-    {
-        self.monitoringSwitch.on = YES;
-        
-        self.uuidLabel.text = [region.proximityUUID UUIDString];
-        self.majorLabel.text = [region.major stringValue];
-        self.minorLabel.text = [region.minor stringValue];
-        
-        [locationManager requestStateForRegion:region];
-    }
-    else
-    {
-        self.monitoringSwitch.on = NO;
-        
-        self.uuidLabel.text = uuid;
-        self.majorLabel.text = [NSString stringWithFormat:@"%d", major];
-        self.minorLabel.text = [NSString stringWithFormat:@"%d", minor];
-    }
+    [self.distanceLabel setText:@"Unknown"];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -70,6 +55,7 @@
         if(region)
         {
             [locationManager stopMonitoringForRegion:region];
+            [locationManager stopRangingBeaconsInRegion:region];
         }
     }
     else
@@ -84,26 +70,83 @@
         region.notifyEntryStateOnDisplay = YES;
         
         [locationManager startMonitoringForRegion:region];
+        [locationManager requestStateForRegion:region];
     }
 }
 
-- (void)locationManager:(CLLocationManager *)manager didDetermineState:(CLRegionState)state forRegion:(CLRegion *)region
-{
+- (void)locationManager:(CLLocationManager *)manager didDetermineState:(CLRegionState)state forRegion:(CLRegion *)region{
+    CLBeaconRegion *beaconRegion = (CLBeaconRegion *) region;
     switch (state)
     {
         case CLRegionStateInside:
             self.stateLabel.text = @"Inside";
+            [locationManager startRangingBeaconsInRegion:beaconRegion];
             break;
             
         case CLRegionStateOutside:
             self.stateLabel.text = @"Outside";
+            [self outsideRegionfor:beaconRegion];
             break;
             
         case CLRegionStateUnknown:
         default:
             self.stateLabel.text = @"Unknown";
+            [self outsideRegionfor:beaconRegion];
+            
             break;
     }
+}
+
+- (void) outsideRegionfor: (CLBeaconRegion*) beaconRegion{
+    [locationManager stopRangingBeaconsInRegion:beaconRegion];
+    [self.majorLabel setText:@""];
+    [self.minorLabel setText:@""];
+    
+}
+- (void)locationManager:(CLLocationManager *)manager didEnterRegion:(CLRegion *)region {
+    if ([region isKindOfClass:[CLBeaconRegion class]]) {
+        CLBeaconRegion *beaconRegion = (CLBeaconRegion *)region;
+        if ([beaconRegion.identifier isEqualToString:BEACON_ID]) {
+            
+            [locationManager startRangingBeaconsInRegion:beaconRegion];
+            
+        }
+    }
+}
+
+- (void)locationManager:(CLLocationManager *)manager didRangeBeacons:(NSArray *)beacons inRegion:(CLBeaconRegion *)region {
+    for (CLBeacon *beacon in beacons) {
+        [self setDistanceLabelForProximity:beacon.proximity];
+        [self setMajorMinorLabelsForBeacon:beacon];
+    }
+}
+
+- (void)setDistanceLabelForProximity:(CLProximity) proximity{
+    switch (proximity) {
+        case CLProximityUnknown:
+            [self.distanceLabel setText:@"Unknown"];
+            break;
+            
+        case CLProximityFar:
+            [self.distanceLabel setText:@"Far"];
+            break;
+            
+        case CLProximityNear:
+            [self.distanceLabel setText:@"Near"];
+            break;
+            
+        case CLProximityImmediate:
+            [self.distanceLabel setText:@"Immediate"];
+            break;
+            
+        default:
+            break;
+    }
+}
+
+- (void)setMajorMinorLabelsForBeacon: (CLBeacon*) beacon{
+    [self.majorLabel setText:[NSString stringWithFormat:@"%@", beacon.major]];
+    [self.minorLabel setText:[NSString stringWithFormat:@"%@", beacon.minor]];
 }
 
 @end

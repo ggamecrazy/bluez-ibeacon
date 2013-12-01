@@ -490,6 +490,7 @@
 				B6D41C1C17EF9BD50086B419 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		B6D41C1D17EF9BD50086B419 /* Build configuration list for PBXNativeTarget "BeaconDemoTests" */ = {
 			isa = XCConfigurationList;
@@ -498,6 +499,7 @@
 				B6D41C1F17EF9BD50086B419 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
