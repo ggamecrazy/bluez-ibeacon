@@ -1,4 +1,4 @@
-bluez-ibeacon
+Bluez-iBeacon
 =============
 
 Complete example of using [Bluez](http://www.bluez.org/) as an iBeacon.
@@ -6,6 +6,17 @@ Complete example of using [Bluez](http://www.bluez.org/) as an iBeacon.
 How to use
 ==========
 
+### iOS device
+
+
+For the iOS part, Fire up XCode and run the BeaconDemo app on a device that supports BTLE such
+as the iPhone 5 or later. The information displayed on screen is needed to run
+the Bluez beacon.
+
+<img src="http://i.imgur.com/G3EACo5.png"  height="350">
+<img src="http://i.imgur.com/29uLNvs.png"  height="350">
+
+### iBeacon Device
 To use this example you will need to install [Bluez](http://www.bluez.org/)
 either compiled by hand or through a development packaged libbluetooth. BTLE
 support requires a recent version of Bluez so make sure to install the latest
@@ -13,10 +24,6 @@ version available.
 
 After installing Bluez you can make the ibeacon binary in the bluez-beacon
 directory.
-
-For the iOS part, Fire up XCode and run the BeaconDemo app on a device that supports BTLE such
-as the iPhone 5 or later. The information displayed on screen is needed to run
-the Bluez beacon.
 
 Confirm that bluetooth is up and running by typing in your console:
 ```
