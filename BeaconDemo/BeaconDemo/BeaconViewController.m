@@ -27,6 +27,11 @@
     [self.uuidLabel setText:uuid];
     
     CLBeaconRegion *region = [[CLBeaconRegion alloc] initWithProximityUUID:[[NSUUID alloc] initWithUUIDString:uuid] identifier:BEACON_ID];
+    
+    region.notifyOnEntry = YES;
+    region.notifyOnExit = YES;
+    region.notifyEntryStateOnDisplay = YES;
+    
     [locationManager startMonitoringForRegion:region];
     [locationManager requestStateForRegion:region];
     
@@ -59,13 +64,16 @@
             [locationManager stopMonitoringForRegion:region];
             [locationManager stopRangingBeaconsInRegion:region];
         }
+        [self.distanceLabel setText:@""];
+        [self.minorLabel setText:@""];
+        [self.majorLabel setText:@""];
+        [self.numberofBeaconsLabel setText:@""];
+        [self.stateLabel setText:@""];
     }
     else
     {
-        NSInteger major = [[NSUserDefaults standardUserDefaults] integerForKey:@"BeaconMajor"];
-        NSInteger minor = [[NSUserDefaults standardUserDefaults] integerForKey:@"BeaconMinor"];
         
-        CLBeaconRegion *region = [[CLBeaconRegion alloc] initWithProximityUUID:[[NSUUID alloc] initWithUUIDString:uuid] major:major minor:minor identifier:BEACON_ID];
+        CLBeaconRegion *region = [[CLBeaconRegion alloc] initWithProximityUUID:[[NSUUID alloc] initWithUUIDString:uuid] identifier:BEACON_ID];
         
         region.notifyOnEntry = YES;
         region.notifyOnExit = YES;
@@ -110,16 +118,16 @@
     if ([region isKindOfClass:[CLBeaconRegion class]]) {
         CLBeaconRegion *beaconRegion = (CLBeaconRegion *)region;
         if ([beaconRegion.identifier isEqualToString:BEACON_ID]) {
-            
             [locationManager startRangingBeaconsInRegion:beaconRegion];
-            
         }
     }
 }
 
 - (void)locationManager:(CLLocationManager *)manager didRangeBeacons:(NSArray *)beacons inRegion:(CLBeaconRegion *)region {
-    [self.numberofBeaconsLabel setText:[NSString stringWithFormat:@"%d", beacons.count ]];
-    for (CLBeacon *beacon in beacons) {
+    [self.numberofBeaconsLabel setText:[NSString stringWithFormat:@"%lu", (unsigned long)beacons.count ]];
+    CLBeacon *beacon = [beacons objectAtIndex:0];//Just grab the first one, Would use a table view to show all available beacons in future
+    
+    if (beacon) {
         [self setDistanceLabelForProximity:beacon.proximity];
         [self setMajorMinorLabelsForBeacon:beacon];
     }
