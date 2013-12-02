@@ -13,7 +13,7 @@ For the iOS part, Fire up XCode and run the BeaconDemo app on a device that supp
 as the iPhone 5 or later. The UDID information displayed on screen is needed to run
 the Bluez beacon.
 
-This demo only shows you the <strong>first</strong> beacon that matched the UDID <em>regardless of major or minor number</em>, in a perfect world it would show a TableView with all visisble iBeacons.
+This demo only shows you the <strong>first</strong> beacon that matched the UDID <em>regardless of major or minor number</em>, in a perfect world it would show a TableView with all visible iBeacons.
 
 <img src="http://i.imgur.com/G3EACo5.png"  height="350">
 <img src="http://i.imgur.com/29uLNvs.png"  height="350">
@@ -64,7 +64,7 @@ sudo ./ibeacon 200 e2c56db5dffb48d2b060d0f5a71096e0 1 1 -29
 Used both the [IOGEAR Bluetooth 4.0 USB Micro Adapter (GBU521)](http://www.amazon.com/dp/B007GFX0PY)
 and the [Cirago Bluetooth 4.0 USB Mini Adapter (BTA8000)](http://www.amazon.com/dp/B0090I9NRE) successfully.
 
-Confiremd to work on the Raspberry Pi with the IOGEAR adapter. 
+Confirmed to work on the Raspberry Pi with the IOGEAR adapter. 
 
 License
 =======
