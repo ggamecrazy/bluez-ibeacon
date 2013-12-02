@@ -10,8 +10,10 @@ How to use
 
 
 For the iOS part, Fire up XCode and run the BeaconDemo app on a device that supports BTLE such
-as the iPhone 5 or later. The information displayed on screen is needed to run
+as the iPhone 5 or later. The UDID information displayed on screen is needed to run
 the Bluez beacon.
+
+This demo only shows you the <strong>first</strong> beacon that matched the UDID <em>regardless of major or minor number</em>, in a perfect world it would show a TableView with all visisble iBeacons.
 
 <img src="http://i.imgur.com/G3EACo5.png"  height="350">
 <img src="http://i.imgur.com/29uLNvs.png"  height="350">
